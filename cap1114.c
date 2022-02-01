@@ -31,7 +31,7 @@ static xTaskHandle s_ui_t_hdl = NULL;
 
 
 int is_button_held(int btn_id){
-	return(held_time[btn_id]>POWER_BUTTON_HOLD_TIME)?1:0;
+	return(held_time[btn_id]>HOLD_TIME)?1:0;
 }
 
 void ui_reset_held(){
