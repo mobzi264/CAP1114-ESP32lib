@@ -14,6 +14,8 @@ This library is a component for the ESP-IDF to interface with the CAP1114 capaci
 Make sure to edit the cap1114.h to set the correct pins and diverse parameters.
 
 Functions :
+| Function | Parameters | Description |
+|--|--|--|
 | **ui_init** |  Callback to the slider when no longer touched, Number of sliders, Values affected by slider, Minimum for each slider, Maximum for each slider, Callback for each slider, LEDs ID that indicate which slider is enabled, slider value indicator LEDs ID, number of slider value indicator LEDs | Inits the UI |
 | **ui_test_led** |  | Blinks every LED |
 | **ui_get_vendor** |  | Gets the chip vendor ID |
