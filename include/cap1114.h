@@ -10,6 +10,7 @@
 #include "driver/uart.h"
 
 
+
 //I2C Parameters.
 #define I2C_MASTER_SCL_IO           22      /*!< GPIO number used for I2C master clock */
 #define I2C_MASTER_SDA_IO           21      /*!< GPIO number used for I2C master data  */
@@ -21,7 +22,8 @@
 
 #define SWITCH_SLIDER_BTN 2                 /*! BUTTON ID (on CAP1114) THAT SWITCHES BETWEEN SLIDERS*/ 
 
-#define HOLD_TIME 20						/*! Time required to consider a button held*/
+#define HOLD_TIME 20
+#define LONG_HOLD_TIME 60						/*! Time required to consider a button held*/
 
 //Registers addresses.
 #define I2C_SLAVE_ADDRESS 0b0101000
@@ -35,6 +37,8 @@
 #define CAP_LED_POLARITY_REGISTER_1 0x75
 #define CAP_LED_LINK_REGISTER 0x80
 #define CAP_LED_BEHAVIOR_REGISTER_3 0x83
+#define CAP_PULSE_PERIOD 0x84
+#define CAP_BREATHE_PERIOD 0x86
 #define CAP_MULTITOUCH_REGISTER 0x2a
 #define CAP_BUTTON_READ_REGISTER_1 0x03
 #define CAP_BUTTON_READ_REGISTER_2 0x04
@@ -43,12 +47,23 @@
 #define CAP_SLEEP_CHANNEL_REGISTER 0x29
 #define CAP_SLIDER_VOLUMETRIC_REGISTER 0x06
 #define CAP_VOLUMETRIC_STEP_REGISTER 0x09
+#define CAP_DATA_SENSITIVITY_REGISTER 0x1F
+#define CAP_DIRECT_DUTY_CYCLE_REGISTER 0x93
+#define CAP_BREATHE_DUTY_CYCLE_REGISTER 0x92
+#define CAP_QUEUE_CONTROL_REGISTER 0x1E
+#define CAP_MULTIPLE_TOUCH_CONFIGURATION_REGISTER 0x1E
+
+
 
 //Utility functions
 int comp_bit(uint8_t src, uint8_t index);
 esp_err_t ui_register_read(uint8_t reg_addr, uint8_t *data, size_t len);
 esp_err_t ui_register_write(uint8_t reg_addr, uint8_t data);
+
+
 esp_err_t ui_init(void (*s_done)(), uint8_t s_count, float ** s_targets, float * s_mins, float * s_maxs, void (**s_callbacks)(float f), uint8_t * s_t_leds, uint8_t * s_leds, uint8_t s_led_count);
+
+
 
 void ui_set_led(uint8_t num, uint8_t state);
 void ui_test_led();
@@ -57,12 +72,17 @@ void ui_get_vendor(); //Reads the vendor ID, should be 5d
 
 uint8_t was_btn_pressed(int btn_id); 
 int is_button_held(int btn_id);
+int is_button_long_held(int btn_id);
 void ui_reset_held();
+void write_slider_leds(float value, float min, float max);
+void status_led(int mode);
 
 void set_led_editable_flag(uint8_t flag);
 
 
 void ui_sleep();
 void ui_wake_up();
+void ui_set_awake();
+void ui_set_showing_batt();
 
 #endif
