@@ -208,9 +208,10 @@ static void ui_routine(void *arg){
 			ui_awake = 0;
 		}
 		
-		uint32_t buttons = read_buttons();
+		uint32_t buttons = read_buttons();i
 		uint8_t *b = (uint8_t *) &buttons;
 		
+		//ESP_LOGI("UI_DEBUG","All Btn 32bit %d", buttons);
 		//Changing the slider mode.
 		if( (comp_bit(b[1], SWITCH_SLIDER_BTN)?1:0) && (comp_bit(previous_buttons[1], SWITCH_SLIDER_BTN)?0:1) ){
 			
@@ -240,14 +241,23 @@ static void ui_routine(void *arg){
 			ui_awake = 1;
 		}
 		
+		
 		//Making sure the power button is held.
-		for(int i = 0; i < 7; i++){
+		for(int i = 0; i < 6; i++){
 			if(comp_bit(b[1], i)){
 				btn_pressed[i] = 1;
 				held_time[i]++;
 			}else{
 				held_time[i] = 0;
 			}	
+		}
+		//Checking button 7 :
+		if(comp_bit(b[2], 0)){
+			btn_pressed[6] = 1;
+			held_time[6]++;
+		}
+		else{
+			held_time[6] = 0;
 		}
 		
 		//Battery
